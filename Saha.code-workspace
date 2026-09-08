@@ -1,0 +1,13 @@
+{
+  "folders": [
+    { "name": "Saha Website", "path": "." },
+    { "name": "Saha Mobile App", "path": "mobile-app" }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.expo": true
+    },
+    "editor.formatOnSave": true
+  }
+}
