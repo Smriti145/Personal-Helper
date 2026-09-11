@@ -22,7 +22,7 @@ import {
   blankLog,
   generateBasics,
   instances,
-  plannedInstances,
+  refreshDay,
   latest,
   nextTasks,
   dateInZone,
@@ -345,14 +345,8 @@ function RoutineApp() {
     }));
     setAction(null);
   }
-  function editState(updated: State) {
-    return {
-      ...updated,
-      snapshots: {
-        ...updated.snapshots,
-        [today]: plannedInstances(updated, today),
-      },
-    };
+  function editState(updated: State, previous = s) {
+    return refreshDay(previous, updated, today);
   }
   function profile(key: string, value: string | number | number[]) {
     change((v) => ({ ...v, profile: { ...v.profile, [key]: value } }));
@@ -672,7 +666,8 @@ function RoutineApp() {
                     ))}
                     <Text style={styles.small}>
                       Existing tasks stay under your control. Use Builder to
-                      adjust them.
+                      adjust them. Tasks with recorded actions keep their
+                      original details for that day.
                     </Text>
                   </Card>
                   <Card title="Reminders">
@@ -982,7 +977,7 @@ function RoutineApp() {
                           editState({
                             ...v,
                             dayRoutines: { ...v.dayRoutines, [today]: name },
-                          }),
+                          }, v),
                         )
                       }
                     />
@@ -1329,6 +1324,10 @@ function RoutineApp() {
               {editor && (
                 <>
                   <Text style={styles.h1}>Routine task</Text>
+                  <Text style={styles.small}>
+                    Changes apply to untouched tasks today and future days.
+                    Recorded actions keep their original task details.
+                  </Text>
                   <Field
                     label="Task name"
                     value={editor.title}
@@ -1374,6 +1373,11 @@ function RoutineApp() {
               {med && (
                 <>
                   <Text style={styles.h1}>Medication</Text>
+                  <Text style={styles.small}>
+                    Changes apply to untouched doses today and future days.
+                    Doses with recorded actions keep their original time,
+                    dose and instructions in your history.
+                  </Text>
                   {(
                     [
                       'name',

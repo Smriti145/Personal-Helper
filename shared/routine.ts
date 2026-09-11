@@ -296,6 +296,24 @@ export function plannedInstances(s: State, date: string): Instance[] {
 export function latest(s: State, t: Instance) {
   return s.events.filter((e) => e.taskId === t.id && e.date === t.date).at(-1);
 }
+/** Apply explicit template edits without rewriting any recorded occurrence. */
+export function refreshDay(previous: State, updated: State, date: string): State {
+  const recordedIds = new Set(
+    previous.events.filter((e) => e.date === date).map((e) => e.taskId),
+  );
+  const recorded = instances(previous, date).filter((t) => recordedIds.has(t.id));
+  const refreshed = [
+    ...recorded,
+    ...plannedInstances(updated, date).filter((t) => !recordedIds.has(t.id)),
+  ].sort(
+    (a, b) => a.scheduled.localeCompare(b.scheduled) || a.priority - b.priority,
+  );
+  return {
+    ...updated,
+    events: previous.events,
+    snapshots: { ...previous.snapshots, [date]: refreshed },
+  };
+}
 export function nextTasks(s: State, date: string, now = new Date()) {
   return instances(s, date)
     .filter((t) => {
@@ -326,6 +344,9 @@ export function validateState(value: unknown): value is State {
       return false;
     const str = (v: unknown, max = 4000) =>
       typeof v === 'string' && v.length <= max;
+    const id = (v: unknown) => str(v, 100) && (v as string).trim().length > 0;
+    const uniqueIds = (items: { id: string }[]) =>
+      new Set(items.map((item) => item.id)).size === items.length;
     const record = (v: unknown) =>
       !!v && typeof v === 'object' && !Array.isArray(v);
     const day = (v: unknown) =>
@@ -437,7 +458,7 @@ export function validateState(value: unknown): value is State {
       return false;
     const validTask = (t: Task) =>
       t &&
-      str(t.id, 100) &&
+      id(t.id) &&
       typeof t.reminder === 'boolean' &&
       [1, 2, 3].includes(t.priority) &&
       Number.isFinite(t.duration) &&
@@ -450,7 +471,7 @@ export function validateState(value: unknown): value is State {
       time.test(t.time) &&
       Array.isArray(t.days) &&
       t.days.every((d) => Number.isInteger(d) && d >= 0 && d <= 6) &&
-      Number.isFinite(t.offset) &&
+      Number.isInteger(t.offset) &&
       Math.abs(t.offset) <= 1440 &&
       [
         'routine',
@@ -478,6 +499,7 @@ export function validateState(value: unknown): value is State {
           day(d) &&
           Array.isArray(ts) &&
           ts.length <= 3400 &&
+          uniqueIds(ts) &&
           ts.every(
             (t) =>
               validTask(t) &&
@@ -491,9 +513,10 @@ export function validateState(value: unknown): value is State {
       s.tasks.every(validTask) &&
       Array.isArray(s.medications) &&
       s.medications.length <= 100 &&
+      uniqueIds(s.medications) &&
       s.medications.every(
         (m) =>
-          str(m.id, 100) &&
+          id(m.id) &&
           str(m.prescriber) &&
           optionalDay(m.start) &&
           optionalDay(m.end) &&
@@ -509,12 +532,14 @@ export function validateState(value: unknown): value is State {
           m.slots.length <= 24 &&
           m.slots.every(validTask),
       ) &&
+      uniqueIds([...s.tasks, ...s.medications.flatMap((m) => m.slots)]) &&
       Array.isArray(s.events) &&
       s.events.length <= 50000 &&
+      uniqueIds(s.events) &&
       s.events.every(
         (e) =>
-          str(e.id, 100) &&
-          str(e.taskId, 100) &&
+          id(e.id) &&
+          id(e.taskId) &&
           day(e.date) &&
           time.test(e.scheduled) &&
           (!e.until || Number.isFinite(Date.parse(e.until))) &&
