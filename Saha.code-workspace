@@ -1,13 +1,24 @@
 {
   "folders": [
-    { "name": "Saha Website", "path": "." },
-    { "name": "Saha Mobile App", "path": "mobile-app" }
+    {
+      "name": "Personal Helper App",
+      "path": "."
+    }
   ],
   "settings": {
     "files.exclude": {
       "**/node_modules": true,
-      "**/.expo": true
+      "**/.wrangler": true,
+      "**/dist": true,
+      "**/.expo": true,
+      "**/build": true,
+      "**/.gradle": true,
+      "**/Pods": true
     },
-    "editor.formatOnSave": true
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.wrangler": true,
+      "**/dist": true
+    }
   }
 }

@@ -36,3 +36,35 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# Local authentication secret and TypeScript cache
+.dev.vars*
+*.tsbuildinfo
+
+# Generated content in all app/server packages
+**/node_modules/
+**/dist/
+**/.wrangler/
+**/.vinext/
+**/.next/
+**/.expo/
+
+# Native generated artifacts
+**/build/
+**/.gradle/
+**/.cxx/
+**/.kotlin/
+**/Pods/
+**/local.properties
+**/xcuserdata/
+
+# Local records and private release-signing material
+*.sqlite
+*.sqlite-*
+*.db
+*.jks
+*.keystore
+!mobile-app/android/app/debug.keystore
+*.p12
+*.p8
+*.mobileprovision

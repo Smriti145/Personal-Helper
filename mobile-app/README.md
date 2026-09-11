@@ -1,25 +1,13 @@
-# Saha mobile app
+# Saha — React Native CLI app
 
-Saha is a native Expo/React Native companion for Android and iPhone. Daily task completion, hydration, mood, energy, and symptoms are saved on the device and restored when the app reopens.
+The app uses the React Native Community CLI with committed `android/` and `ios/` projects. Start it using `npm start`, `npm run android` or `npm run ios`; Expo is not used.
 
-## Open in VS Code
+See the parent [README](../README.md) for installation, API setup and native build instructions.
 
-Open the parent folder `Personal Helper` to work on both products, or open this `mobile-app` folder by itself for only the phone app.
+- `App.tsx`: native screens and application state.
+- `src/api.ts`: account API and Keychain/Keystore session storage.
+- `src/notifications.ts`: native reminder scheduling with Notifee.
+- `src/config.ts`: physical-device API URL configuration.
+- `../shared/`: shared scheduling domain.
 
-## Run on a phone
-
-1. Install **Expo Go** on the Android or iPhone.
-2. In a VS Code terminal, change into `mobile-app`.
-3. Run `npm start`.
-4. Scan the QR code with Expo Go. The computer and phone should be on the same network.
-
-Use `npm run android` for an Android emulator or `npm run ios` for the iOS Simulator on macOS.
-
-## Product structure
-
-- `App.tsx` — interactive Today, Plan, Track, Medicines, and Insights screens.
-- `app.json` — app name and native configuration.
-- `assets/` — app icons and splash assets.
-- Async Storage — local persistence for the current MVP.
-
-The existing web application remains in the parent project. A future shared API can synchronize the web and native applications across devices.
+Run `npm ci` before development because generated dependencies are deliberately excluded from the cleaned folder.

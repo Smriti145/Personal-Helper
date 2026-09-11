@@ -1,6 +1,18 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "@react-native/typescript-config",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,
+    "types": [
+      "react"
+    ]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../shared/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "ios/Pods"
+  ]
 }

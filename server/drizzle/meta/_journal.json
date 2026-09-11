@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788848605397,
+      "tag": "0000_greedy_the_initiative",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788953943023,
+      "tag": "0001_daffy_namor",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788954505107,
+      "tag": "0002_nasty_gideon",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1788958025885,
+      "tag": "0003_wandering_mandarin",
+      "breakpoints": true
+    }
+  ]
+}
