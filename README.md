@@ -81,3 +81,5 @@ After stopping Metro, the API and native builds, run `npm run clean`. It removes
 ## If the app says “SahaNative has not been registered”
 
 Run `npm start` once, then `npm run android` to rebuild/reconnect to port 8082. Do not start a second Metro in `mobile-app`. Root and mobile-app start commands launch the same bundler. If another project's Metro occupies 8081, leave it running; Personal Helper uses 8082.
+
+Android Studio and direct Gradle debug builds also default to Metro 8082 through `mobile-app/android/gradle.properties`. Rebuild/reinstall the app once after changing this value; restarting Metro alone does not change the port embedded in an older APK. Existing GroceryCompare Metro on 8081 should remain untouched.
