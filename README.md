@@ -10,6 +10,8 @@ Saha is an Android/iOS personal health and routine app. The mobile app uses Reac
 - `tests/` — routine and reminder regression tests.
 - `docs/` — product architecture and current feature boundaries.
 
+See [the repository audit and prioritized implementation plan](docs/REPOSITORY_AUDIT.md) for verified coverage, remaining correctness issues and incremental development order.
+
 Generated dependencies and build outputs have been removed to keep this checkout small. Install them when developing; `node_modules` and native build caches will grow again normally. Existing server secrets and local database files are retained.
 
 ## Install
