@@ -305,7 +305,11 @@ function RoutineApp() {
       revision.current = result.revision;
       if (generation.current === version) setDirty(false);
       setMessage('Saved to your account.');
-      await syncReminders(current);
+      try {
+        await syncReminders(current);
+      } catch (error) {
+        setMessage('Saved to your account. ' + (error as Error).message);
+      }
     } catch (e) {
       setMessage((e as Error).message);
     } finally {

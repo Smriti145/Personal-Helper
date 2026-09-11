@@ -74,6 +74,20 @@ Refreshing today's plan preserves the original snapshot of every task that has a
 
 This is not a general event-sourced model or a medical schedule migration policy. Cross-midnight occurrence identity, earlier unsnapshotted history, native reminder reconciliation and offline persistence remain tracked above. Stricter validation rejects malformed legacy aggregates without rewriting them; recovery/import tooling remains future work.
 
+## P0.2 development update
+
+Implemented the shared native timestamp planner in `shared/notification-plan.ts` and connected it to the existing Notifee adapter. Quiet-hours logic is reused from `shared/reminders.ts`; its scan/escalation function remains separate and is not claimed as native escalation.
+
+- All configuration and time resolution happens before native trigger mutation. Missing or repeated daylight-saving wall times are omitted and reported for user review; no medication instruction or task time is rewritten. Absolute snooze deadlines do not require wall-time disambiguation.
+- Queue limits are applied after sorting actual delivery instants, including snooze and advance times. Existing notification IDs are retained across rescheduling/restarts.
+- Native updates run in FIFO order with a captured state per request; a failed request does not block later requests. Pending requests are serialized rather than coalesced.
+- Reconciliation removes only IDs absent from the desired plan and upserts desired IDs. A create failure does not first erase all valid reminders. Listing failure prevents writes; individual cancel/create failures are reported after attempting the remaining operations. OS operations are not transactional: partial updates or a stale trigger after a failed cancellation remain possible and require retry.
+- Account-save success is kept distinct from reminder failure in the UI.
+
+Verification: 33 tests pass, including 11 new planner/provider tests for recurrence, date bounds, offsets, advance, quiet hours, caps, completion, stable IDs, DST transitions, failure recovery and serialization. Mobile/API typechecks and Android/iOS JavaScript bundles pass. Native acceptance is still pending: no Android device is connected and the iOS simulator tool is unavailable. Fake-provider tests do not verify OS delivery, sound, vibration or permission behavior.
+
+Next: P0.3 cross-midnight occurrence/snooze correctness, then P0.4 account-load/foreground refresh and save lifecycle. Durable offline storage, closed-app renewal and native escalation remain outstanding. This update supersedes the baseline cancel-all and concurrency findings above; it does not mark the full roadmap complete.
+
 ## Verification record
 
 Baseline: `npm test` passed all 12 existing tests before edits. After P0.1 implementation:

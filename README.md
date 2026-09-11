@@ -65,6 +65,8 @@ Native register/login, configurable onboarding, routine builder, daily checklist
 
 Native notifications are queued through Notifee, respecting configured dates, completion, snooze, quiet hours and category preferences. The app refreshes the next seven days when syncing, capped at 50 Android / 60 iOS notifications. Device permissions and OS restrictions affect delivery; exact alarm delivery and indefinite background queue renewal are not guaranteed.
 
+Reminder updates are serialized and reconcile individual triggers rather than clearing the entire queue first. Missing or ambiguous daylight-saving times are reported for review instead of silently moved. Failed native updates can be partial; retry the reminder refresh. Cross-midnight snooze handling remains an open audit item.
+
 ## Checks
 
 ```sh
