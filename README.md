@@ -10,6 +10,8 @@ Saha is an Android/iOS personal health and routine app. The mobile app uses Reac
 - `tests/` — routine and reminder regression tests.
 - `docs/` — product architecture and current feature boundaries.
 
+See [the repository audit and prioritized implementation plan](docs/REPOSITORY_AUDIT.md) for verified coverage, remaining correctness issues and incremental development order.
+
 Generated dependencies and build outputs have been removed to keep this checkout small. Install them when developing; `node_modules` and native build caches will grow again normally. Existing server secrets and local database files are retained.
 
 ## Install
@@ -62,6 +64,8 @@ Android emulator API default: `http://10.0.2.2:3000`. iOS simulator: `http://loc
 Native register/login, configurable onboarding, routine builder, daily checklist, medication schedules, meal planning, hydration, movement, sleep, wellbeing, calendar, weekly insights, recovery guidance, export and account deletion. The app uses the API for durable account data; temporary preview mode is explicitly unsaved.
 
 Native notifications are queued through Notifee, respecting configured dates, completion, snooze, quiet hours and category preferences. The app refreshes the next seven days when syncing, capped at 50 Android / 60 iOS notifications. Device permissions and OS restrictions affect delivery; exact alarm delivery and indefinite background queue renewal are not guaranteed.
+
+Reminder updates are serialized and reconcile individual triggers rather than clearing the entire queue first. Missing or ambiguous daylight-saving times are reported for review instead of silently moved. Failed native updates can be partial; retry the reminder refresh. Cross-midnight snooze handling remains an open audit item.
 
 ## Checks
 

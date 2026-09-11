@@ -48,7 +48,7 @@ A shared typed state powers Today, Builder, Medicines, Meals, Track, Calendar, I
 
 ## Schedule and reminder engine
 
-Materialize deterministic date/task IDs from selected routine, recurrence days, date limits and user-entered meal offsets. Relative tasks retain exact offsets, including crossing midnight. Events apply to instances, never medication instructions. Snooze changes only reminder delivery. Recovery displays three pending priorities and creates no replacement medication doses. Notifications use generic text, quiet hours, acknowledgement and bounded escalation; permission is requested by user gesture.
+Materialize date/task occurrences from selected routine, recurrence days, date limits and user-entered meal offsets. Relative tasks retain exact offsets, including crossing midnight. Events apply to instances, never medication instructions. Explicit edits to today's plan preserve every occurrence with recorded actions; untouched tasks and future days use the edited templates. Snooze changes only reminder delivery. Recovery displays three pending priorities and creates no replacement medication doses. Native notifications use generic text and quiet hours; permission is requested by user gesture. Bounded escalation exists in the shared scan planner but is not connected to the native timestamp scheduler. Cross-midnight snoozes and native reconciliation still need correctness work; see the repository audit.
 
 ## Security model
 
@@ -56,7 +56,7 @@ The application validates signed JWT cookies and server-side session ownership; 
 
 ## Local project delivery
 
-All changes live in Personal Helper; HealthBuddy/routine-os.jsx supplied reference patterns only. No publication is requested or performed. The retained hosting metadata is existing project configuration and is not required for local sign-in. Vite no longer loads the Sites authentication plugin.
+All changes live in Personal Helper; HealthBuddy/routine-os.jsx supplied reference patterns only. No publication is requested or performed. The current app does not require Sites hosting metadata or a Sites authentication plugin.
 
 ## Actual MVP boundaries
 
